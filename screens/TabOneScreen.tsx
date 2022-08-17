@@ -1,13 +1,19 @@
-import { StyleSheet } from 'react-native';
+import { Button, StyleSheet } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
+import makeRequest from '../functions/main';
 import { RootTabScreenProps } from '../types';
 
 export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab One</Text>
+      <Button onPress={() => makeRequest()}
+        title="Learn More"
+        color="#841584"
+        accessibilityLabel="Learn more about this purple button"
+      />
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       <EditScreenInfo path="/screens/TabOneScreen.tsx" />
     </View>
