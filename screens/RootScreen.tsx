@@ -3,11 +3,15 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Text, View } from '../components/Themed';
 import makeRequest, { CityObject } from '../functions/main';
+import navigation from '../navigation';
 import { RootTabScreenProps } from '../types';
 
+interface HomeScreenProp {
+  navigation: any;
+}
 
 
-export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
+export default function RootScreen({ navigation }: HomeScreenProp) {
   const [getInputValue, setInputValue] = useState<undefined | string>();
   const [getResult, setResult] = useState<undefined | CityObject[]>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
@@ -79,7 +83,7 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
           getResult.map((city) => {
               colorCheck = !colorCheck
               return( 
-                <TouchableOpacity key={city.name} style={colorCheck ? {...styles.resultContainer, backgroundColor:"lightgray"} : styles.resultContainer}>
+                <TouchableOpacity onPress={() => {navigation.navigate("WeatherResultScreen", city)}} key={city.name} style={colorCheck ? {...styles.resultContainer, backgroundColor:"lightgray"} : styles.resultContainer}>
                   <Text style={styles.cityName}>{city.name}, </Text>
                   <Text style={styles.regionName}>{city.region}</Text>
                 </TouchableOpacity>
