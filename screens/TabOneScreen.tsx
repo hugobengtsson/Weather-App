@@ -1,6 +1,6 @@
 import { FontAwesome } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Text, View } from '../components/Themed';
 import makeRequest, { CityObject } from '../functions/main';
 import { RootTabScreenProps } from '../types';
@@ -10,15 +10,16 @@ import { RootTabScreenProps } from '../types';
 export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
   const [getInputValue, setInputValue] = useState<undefined | string>();
   const [getResult, setResult] = useState<undefined | CityObject[]>(undefined);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
 
     if(getInputValue) {
 
       makeRequest(getInputValue).then((r) => {
-        
-          setResult(r);
-          
+        setResult(r);
+        setLoading(false)
+
       })
 
     }
@@ -29,11 +30,10 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
   var timer: undefined | NodeJS.Timeout = undefined;
 
   function setInputTimer(value: string) {
-
-    console.log(value)
-
+    setLoading(true)
     if(value.length == 0 || value === "" || value === " "){
       setResult(undefined)
+      setLoading(false)
     }
 
     if(value.length == 1) {
@@ -57,7 +57,7 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
 
   return (
     <View style={styles.container}>
-      
+      {/* InputComponent */}
       <View style={styles.inputContainer}>
         <TextInput 
           style={styles.input}
@@ -66,13 +66,12 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
           maxLength={17}
           onChangeText={setInputTimer}
         />
-        <TouchableOpacity>
-          <FontAwesome
-            name="search"
-            size={25}
-            style={{ marginRight: 15 }}
-          />
-        </TouchableOpacity>
+        <ActivityIndicator
+        style={styles.activity}
+        size="large"
+        color="#000000"
+        animating={loading}
+        />
       </View>
 
       <View>
@@ -89,6 +88,8 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
           }))
         : undefined}
       </View>
+
+      {/* End InputComponent */}
 
     </View>
   );
@@ -123,6 +124,7 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 20,
+    width: "100%",
   },
   resultContainer: {
     display: "flex",
@@ -134,5 +136,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
   }, regionName: {
     fontSize: 16,
-  }
+  }, activity: {
+    position: "absolute",
+    right: "2%",
+  },
 });
