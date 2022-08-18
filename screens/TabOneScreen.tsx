@@ -13,16 +13,45 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
 
   useEffect(() => {
 
-    getInputValue ? (
+    if(getInputValue) {
 
       makeRequest(getInputValue).then((r) => {
         
-        setResult(r)
-        
+          setResult(r);
+          
       })
-      ) : setResult(undefined)
+
+    }
 
   },[getInputValue]);
+
+
+  var timer: undefined | NodeJS.Timeout = undefined;
+
+  function setInputTimer(value: string) {
+
+    console.log(value)
+
+    if(value.length == 0 || value === "" || value === " "){
+      setResult(undefined)
+    }
+
+    if(value.length == 1) {
+      setInputValue(value);
+      return;
+    }
+
+    if(timer) {
+      clearTimeout(timer);
+    }
+
+    timer = setTimeout(() => {
+
+      setInputValue(value)
+
+    }, 1000)
+
+  }
 
   var colorCheck = false;
 
@@ -35,7 +64,7 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
           placeholder='Sök efter din stad!'
           autoCapitalize="characters"
           maxLength={17}
-          onChangeText={setInputValue}
+          onChangeText={setInputTimer}
         />
         <TouchableOpacity>
           <FontAwesome
@@ -52,7 +81,7 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
               colorCheck = !colorCheck
               return( 
                 <TouchableOpacity key={city.name} style={colorCheck ? {...styles.resultContainer, backgroundColor:"lightgray"} : styles.resultContainer}>
-                  <Text style={styles.cityName}t>{city.name}, </Text>
+                  <Text style={styles.cityName}>{city.name}, </Text>
                   <Text style={styles.regionName}>{city.region}</Text>
                 </TouchableOpacity>
             )
