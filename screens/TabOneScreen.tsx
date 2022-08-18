@@ -49,9 +49,9 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
       <View>
         { getResult ? ( 
           getResult.map((city) => {
-
+              colorCheck = !colorCheck
               return( 
-                <TouchableOpacity key={city.name} style={styles.resultContainer}>
+                <TouchableOpacity key={city.name} style={colorCheck ? {...styles.resultContainer, backgroundColor:"lightgray"} : styles.resultContainer}>
                   <Text style={styles.cityName}t>{city.name}, </Text>
                   <Text style={styles.regionName}>{city.region}</Text>
                 </TouchableOpacity>
