@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet } from 'react-native';
 import { Text, View } from '../components/Themed';
+import { requestWeather } from '../functions/main';
 
 interface PopulationResultProp {
     route: any;
@@ -9,10 +10,21 @@ interface PopulationResultProp {
 
 export default function WeatherResultScreen({ route }: PopulationResultProp) {
 
-    console.log(route.params)
+    const [getResult, setResult] = useState<any>(undefined);
+    const [loading, setLoading] = useState<boolean>(false);
 
 
+    useEffect(() => {
 
+        requestWeather(route.params.long, route.params.lat).then((r) => {
+
+            setResult(r)
+
+        })
+    
+    },[]);
+
+    console.log(getResult)
 
     return (
         <View style={styles.container}>

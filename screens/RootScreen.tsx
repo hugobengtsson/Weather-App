@@ -2,7 +2,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Text, View } from '../components/Themed';
-import makeRequest, { CityObject } from '../functions/main';
+import { CityObject, requestCity } from '../functions/main';
 import navigation from '../navigation';
 import { RootTabScreenProps } from '../types';
 
@@ -20,7 +20,7 @@ export default function RootScreen({ navigation }: HomeScreenProp) {
 
     if(getInputValue) {
 
-      makeRequest(getInputValue).then((r) => {
+      requestCity(getInputValue).then((r) => {
         setResult(r);
         setLoading(false)
 
