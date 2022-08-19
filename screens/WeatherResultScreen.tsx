@@ -1,7 +1,8 @@
+import { FontAwesome } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet } from 'react-native';
 import { Text, View } from '../components/Themed';
-import { requestWeather } from '../functions/main';
+import { requestWeather, WeatherObject } from '../functions/main';
 
 interface PopulationResultProp {
     route: any;
@@ -10,7 +11,7 @@ interface PopulationResultProp {
 
 export default function WeatherResultScreen({ route }: PopulationResultProp) {
 
-    const [getResult, setResult] = useState<any>(undefined);
+    const [getResult, setResult] = useState<WeatherObject[] | undefined>(undefined);
     const [loading, setLoading] = useState<boolean>(false);
 
 
@@ -24,7 +25,8 @@ export default function WeatherResultScreen({ route }: PopulationResultProp) {
     
     },[]);
 
-    console.log(getResult)
+    let today: Date | number = new Date();
+    today = today.getDate();
 
     return (
         <View style={styles.container}>
@@ -33,11 +35,32 @@ export default function WeatherResultScreen({ route }: PopulationResultProp) {
                 <Text style={styles.cityname}>{route.params.name}</Text>
             </View>
 
-            <View style={styles.weatherList}>
+            <ScrollView style={styles.weatherList}>
 
+                {
+                    getResult ? (
 
+                        getResult.map((timeStamp) => {
+                            
+                            return (
+                                <View style={styles.weatherListItem}>
+                                    <View style={styles.dateContainer}>
+                                    <Text>{timeStamp.hour}:00</Text>
+                                    {today != timeStamp.date ? (
+                                        <Text>{timeStamp.date}/8</Text>
+                                    ): <Text>Idag</Text>}
+                                    </View>
+                                    <View style={styles.tempContainer}>
+                                        <Text style={{fontSize: 25, marginRight: "1%"}}>{timeStamp.temp}</Text>
+                                        <FontAwesome name="sun-o" size={25}/>
+                                    </View>
+                                </View>
+                        )
+                    })
+                    ) : undefined
+                }
 
-            </View>
+            </ScrollView>
 
 
         </View>
@@ -55,7 +78,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'lightgray'
     }, banner: {
         width: "100%",
-        height: "30%",
+        height: "20%",
         backgroundColor: "white",
         borderBottomColor: "lightgrey",
         borderBottomWidth: 1,
@@ -68,5 +91,25 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         width: "100%",
         height: "100%",
+    }, weatherListItem: {
+        width: "100%",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "2%",
+        borderBottomColor: "lightgrey",
+        borderBottomWidth: 1,
+    }, dateContainer: {
+        width: "25%",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between"
+    }, tempContainer: {
+        width: "25%",
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between"
     }
 });

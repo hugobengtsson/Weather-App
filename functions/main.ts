@@ -23,7 +23,7 @@ export async function requestWeather(long: string, lat: string) {
 
     let response = await makeRequest(`http://${IP}/api/weather/${long}/${lat}/`);
 
-    let result = await response.json();
+    let result: WeatherObject[] = await response.json();
 
     return result;
 
@@ -36,4 +36,11 @@ export interface CityObject {
     region: string,
     long: string,
     lat: string,
+}
+
+export interface WeatherObject {
+    hour: number,
+    date: number,
+    temp: number,
+    symbol: number,
 }
