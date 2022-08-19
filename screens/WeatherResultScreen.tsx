@@ -43,7 +43,7 @@ export default function WeatherResultScreen({ route }: PopulationResultProp) {
                         getResult.map((timeStamp) => {
                             
                             return (
-                                <View style={styles.weatherListItem}>
+                                <View key={timeStamp.id} style={styles.weatherListItem}>
                                     <View style={styles.dateContainer}>
                                     <Text>{timeStamp.hour}:00</Text>
                                     {today != timeStamp.date ? (

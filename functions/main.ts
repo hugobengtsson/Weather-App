@@ -39,6 +39,7 @@ export interface CityObject {
 }
 
 export interface WeatherObject {
+    id: string,
     hour: number,
     date: number,
     temp: number,
