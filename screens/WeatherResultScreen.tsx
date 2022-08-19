@@ -10,9 +10,24 @@ interface PopulationResultProp {
 export default function WeatherResultScreen({ route }: PopulationResultProp) {
 
     console.log(route.params)
+
+
+
+
     return (
-        <View>
-            <Text>Väder osv.</Text>
+        <View style={styles.container}>
+
+            <View style={styles.banner}>
+                <Text style={styles.cityname}>{route.params.name}</Text>
+            </View>
+
+            <View style={styles.weatherList}>
+
+
+
+            </View>
+
+
         </View>
     );
 
@@ -22,5 +37,24 @@ export default function WeatherResultScreen({ route }: PopulationResultProp) {
 }
 
 const styles = StyleSheet.create({
-
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: 'lightgray'
+    }, banner: {
+        width: "100%",
+        height: "30%",
+        backgroundColor: "white",
+        borderBottomColor: "lightgrey",
+        borderBottomWidth: 1,
+        display:"flex",
+        alignItems:"center",
+        justifyContent:"center",
+    }, cityname: {
+        fontSize: 32,
+    }, weatherList: {
+        backgroundColor: "white",
+        width: "100%",
+        height: "100%",
+    }
 });
