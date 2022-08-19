@@ -1,16 +1,34 @@
 import { IP } from "../ip";
 
-export default async function makeRequest(city: string) {
+export async function makeRequest(url: string) {
 
-    let response = await fetch(`http://${IP}/api/city/${city}`);
+    let response = await fetch(url);
 
-    let result: CityObject[] = await response.json();
-    console.log(result)
-    return result;
+    return response;
 
 
 }
 
+export async function requestCity(city:string) {
+
+    let response = await makeRequest(`http://${IP}/api/city/${city}`);
+
+    let result: CityObject[] = await response.json();
+
+    return result;
+
+}
+
+export async function requestWeather(long: string, lat: string) {
+
+    let response = await makeRequest(`http://${IP}/api/weather/${long}/${lat}/`);
+
+    let result = await response.json();
+
+    return result;
+
+
+}
 
 
 export interface CityObject {
