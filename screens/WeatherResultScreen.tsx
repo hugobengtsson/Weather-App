@@ -1,28 +1,28 @@
 import { FontAwesome } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, View } from '../components/Themed';
 import { requestWeather, WeatherObject } from '../functions/main';
+import navigation from '../navigation';
 
-interface PopulationResultProp {
-    route: any;
+interface WeatherResultProp {
+    navigation: any,
+    route: any,
 }
 
 
-export default function WeatherResultScreen({ route }: PopulationResultProp) {
+export default function WeatherResultScreen({ navigation, route }: WeatherResultProp) {
 
     const [getResult, setResult] = useState<WeatherObject[] | undefined>(undefined);
     const [loading, setLoading] = useState<boolean>(false);
 
 
     useEffect(() => {
-
-        requestWeather(route.params.long, route.params.lat).then((r) => {
-
-            setResult(r)
-
-        })
-    
+        const sendReq = async () => {
+            let response = await requestWeather(route.params.long, route.params.lat)
+            setResult(response)
+        }
+        sendReq();
     },[]);
 
     let today: Date | number = new Date();
@@ -30,9 +30,11 @@ export default function WeatherResultScreen({ route }: PopulationResultProp) {
 
     return (
         <View style={styles.container}>
-
             <View style={styles.banner}>
-                <Text style={styles.cityname}>{route.params.name}</Text>
+                <Text style={{...styles.cityname, marginRight: "2%"}}>{route.params.name}</Text>
+                <TouchableOpacity onPress={() => navigation.navigate("modal", route.params)}>
+                    <FontAwesome name="save" size={25} />
+                </TouchableOpacity>
             </View>
 
             <ScrollView style={styles.weatherList}>
@@ -83,6 +85,7 @@ const styles = StyleSheet.create({
         borderBottomColor: "lightgrey",
         borderBottomWidth: 1,
         display:"flex",
+        flexDirection: "row",
         alignItems:"center",
         justifyContent:"center",
     }, cityname: {

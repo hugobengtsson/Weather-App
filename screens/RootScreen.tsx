@@ -19,13 +19,12 @@ export default function RootScreen({ navigation }: HomeScreenProp) {
   useEffect(() => {
 
     if(getInputValue) {
-
-      requestCity(getInputValue).then((r) => {
-        setResult(r);
-        setLoading(false)
-
-      })
-
+      const sendReq = async () => {
+          let response = await requestCity(getInputValue)
+          setResult(response);
+          setLoading(false)
+      }
+      sendReq()
     }
 
   },[getInputValue]);
