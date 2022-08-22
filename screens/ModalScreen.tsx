@@ -1,35 +1,84 @@
-import { StatusBar } from 'expo-status-bar';
-import { Platform, StyleSheet } from 'react-native';
-
-import EditScreenInfo from '../components/EditScreenInfo';
+import React, { useState } from 'react';
+import { ActivityIndicator, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Text, View } from '../components/Themed';
 
-export default function ModalScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Modal</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/ModalScreen.tsx" />
+interface ModalProps {
+  route: any,
+}
 
-      {/* Use a light status bar on iOS to account for the black space above the modal */}
-      <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-    </View>
+
+
+export default function ModalScreen({ route }: ModalProps) {
+  const [loading, setLoading] = useState<boolean>(false);
+
+
+  return (
+    <>
+      <View style={styles.container}>
+        <Text style={styles.title}>{route.params.name}</Text>
+        <Text style={styles.titleText}>Spara dina favoritorter så att du snabbt kan kolla vädret på dina smultronställen</Text>
+        <View style={styles.inputContainer}>
+          <TextInput 
+          style={styles.input} 
+          placeholder="Namn på objekt"
+          />
+        </View>
+        <TouchableOpacity onPress={() => setLoading(true)} style={styles.buttonContainer}>
+          <View style={styles.button}>
+            <Text>Spara!</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+      <View style={{...styles.loader, display: loading ? "flex": "none",}}>
+      <ActivityIndicator
+        size="large"
+        color="black"
+        animating={loading}
+        />
+      </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: "center",
+    padding: "5%",
+  }, title: {
+    fontSize: 32,
+    fontWeight: "bold",
+  }, titleText: {
+    width: "80%",
+    marginTop: "2%",
+    textAlign: "center",
+  }, inputContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    backgroundColor: "lightgray",
+    width: "90%",
+    height: "8%",
+    marginTop: "5%",
+    justifyContent:"space-between",
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
+    borderRadius: 10,
+    padding: '3%',
+  }, input: {
     fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
+    width: "100%",
+  }, buttonContainer: {
+    marginTop: "3%",
+  }, button: {
+    backgroundColor: "lightgray",
+    padding: "3%",
+    borderRadius: 10,
+  }, loader: {
+    height: "100%",
+    width: "100%",
+    position: "absolute",
+    zIndex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(200, 200, 200, 0.6)",
+  }
 });
