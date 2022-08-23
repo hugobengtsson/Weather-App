@@ -16,7 +16,6 @@ export default function WeatherResultScreen({ navigation, route }: WeatherResult
     const [getResult, setResult] = useState<WeatherObject[] | undefined>(undefined);
     const [loading, setLoading] = useState<boolean>(false);
 
-
     useEffect(() => {
         const sendReq = async () => {
             let response = await requestWeather(route.params.long, route.params.lat)
@@ -31,10 +30,13 @@ export default function WeatherResultScreen({ navigation, route }: WeatherResult
     return (
         <View style={styles.container}>
             <View style={styles.banner}>
-                <Text style={{...styles.cityname, marginRight: "2%"}}>{route.params.name}</Text>
-                <TouchableOpacity onPress={() => navigation.navigate("modal", route.params)}>
-                    <FontAwesome name="save" size={25} />
-                </TouchableOpacity>
+                <View style={styles.bannerTitleContainer}>
+                    <Text style={{...styles.cityname, marginRight: "2%"}}>{route.params.name}</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate("modal", route.params)}>
+                        <FontAwesome name="save" size={25} />
+                    </TouchableOpacity>
+                </View>
+                {route.params.id ? <Text>{route.params.cityName + ", " + route.params.region}</Text> : undefined}
             </View>
 
             <ScrollView style={styles.weatherList}>
@@ -85,6 +87,9 @@ const styles = StyleSheet.create({
         borderBottomColor: "lightgrey",
         borderBottomWidth: 1,
         display:"flex",
+        alignItems:"center",
+        justifyContent:"center",
+    }, bannerTitleContainer: {
         flexDirection: "row",
         alignItems:"center",
         justifyContent:"center",

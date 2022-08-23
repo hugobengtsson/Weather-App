@@ -2,7 +2,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Text, View } from '../components/Themed';
-import { CityObject, requestCity } from '../functions/main';
+import { CityObject, FavoriteCity, requestCity, requestFavorites } from '../functions/main';
 import navigation from '../navigation';
 import { RootTabScreenProps } from '../types';
 
@@ -14,6 +14,7 @@ interface HomeScreenProp {
 export default function RootScreen({ navigation }: HomeScreenProp) {
   const [getInputValue, setInputValue] = useState<undefined | string>();
   const [getResult, setResult] = useState<undefined | CityObject[]>(undefined);
+  const [getFavorites, setFavorites] = useState <false | FavoriteCity[]>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -28,7 +29,6 @@ export default function RootScreen({ navigation }: HomeScreenProp) {
     }
 
   },[getInputValue]);
-
 
   var timer: undefined | NodeJS.Timeout = undefined;
 
@@ -55,6 +55,21 @@ export default function RootScreen({ navigation }: HomeScreenProp) {
     }, 1000)
 
   }
+
+
+  useEffect(() => {
+
+    if(!getFavorites) {
+      const sendReq = async () => {
+        let response = await requestFavorites();
+        setFavorites(response)
+      };
+      sendReq();
+    }
+
+
+  }, [])
+
 
   var colorCheck = false;
 
@@ -93,6 +108,29 @@ export default function RootScreen({ navigation }: HomeScreenProp) {
       </View>
 
       {/* End InputComponent */}
+
+      <View style={styles.favoritesContainer}>
+        <Text style={{fontSize: 24,}}>Dina sparade favoritplatser:</Text>
+        {
+          getFavorites ? (
+            getFavorites.map((favorite) => {
+
+              return(
+                <TouchableOpacity key={favorite.id} style={styles.favoriteContainer} onPress={() => {navigation.navigate("WeatherResultScreen", favorite)}}>
+                  <Text>{favorite.name}</Text>
+                  <Text>{favorite.cityName}, {favorite.region}</Text>
+                  <Text>{favorite.long + " " + favorite.lat}</Text>
+                </TouchableOpacity>
+              )
+            })
+          ): (
+            <Text>Du har inte sparat några favoriter...</Text>
+          )}
+          
+          
+      </View>
+
+
 
     </View>
   );
@@ -142,5 +180,16 @@ const styles = StyleSheet.create({
   }, activity: {
     position: "absolute",
     right: "2%",
-  },
+  }, favoritesContainer: {
+    position: "absolute",
+    marginTop: "70%",
+    width: "90%",
+    padding: "5%",
+    borderRadius: 10,
+  }, favoriteContainer: {
+    padding: "3%",
+    backgroundColor: "grey",
+    marginTop: "3%",
+    borderRadius: 10,
+  }
 });
