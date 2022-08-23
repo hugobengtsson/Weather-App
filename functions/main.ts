@@ -30,6 +30,17 @@ export async function requestWeather(long: string, lat: string) {
 
 }
 
+export async function requestFavorites() {
+
+    let response = await makeRequest("http://localhost:3000/api/city/favorites/all");
+
+    let result: FavoriteCity[] | false = await response.json();
+
+    return result;
+
+
+}
+
 
 export interface CityObject {
     name: string,
@@ -44,4 +55,13 @@ export interface WeatherObject {
     date: number,
     temp: number,
     symbol: number,
+}
+
+export interface FavoriteCity {
+    name: string,
+    cityName: string,
+    region: string,
+    lat: string,
+    long: string,
+    id: string,
 }
