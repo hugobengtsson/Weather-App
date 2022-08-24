@@ -1,8 +1,7 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { useIsFocused } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-import { Text, View } from '../components/Themed';
+import { ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 import { requestWeather, WeatherObject } from '../functions/main';
 
 interface WeatherResultProp {

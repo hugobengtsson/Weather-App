@@ -1,8 +1,7 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { useIsFocused } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-import { Text, View } from '../components/Themed';
+import { ActivityIndicator, StyleSheet, TextInput, TouchableOpacity, View, Text } from 'react-native';
 import { CityObject, FavoriteCity, requestCity, requestFavorites, removeFavorite } from '../functions/main';
 
 interface HomeScreenProp {

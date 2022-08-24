@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { ActivityIndicator, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-import { Text, View } from '../components/Themed';
+import { ActivityIndicator, StyleSheet, TextInput, TouchableOpacity, View, Text } from 'react-native';
 import { addFavorite, FavoriteCity, NewFavoriteCity, updateFavorite } from '../functions/main';
 
 interface ModalProps {
