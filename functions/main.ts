@@ -11,7 +11,7 @@ export async function makeRequest(url: string, requestObject: RequestObject | un
 
 export async function requestCity(city: string) {
 
-    let response = await makeRequest(`http://${IP}/api/city/${city}`, undefined);
+    let response = await makeRequest(`http://${IP}/api/city/getcity/${city}`, undefined);
 
     let result: CityObject[] = await response.json();
 
@@ -42,9 +42,27 @@ export async function requestFavorites() {
 export async function addFavorite(city: NewFavoriteCity) {
 
     let body = JSON.stringify(city);
-    console.log(body)
+
     let response = await makeRequest(`http://${IP}/api/city/savecity`, {
         method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: body
+    })
+
+    let result = response.json();
+
+    return result;
+
+}
+
+export async function removeFavorite(favorite: FavoriteCity): Promise<Boolean> {
+
+    let body = JSON.stringify(favorite);
+
+    let response = await makeRequest(`http://${IP}/api/city/removecity`, {
+        method: "DELETE",
         headers: {
             "Content-Type": "application/json"
         },
