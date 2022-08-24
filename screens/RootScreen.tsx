@@ -2,9 +2,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Text, View } from '../components/Themed';
-import { CityObject, FavoriteCity, requestCity, requestFavorites } from '../functions/main';
-import navigation from '../navigation';
-import { RootTabScreenProps } from '../types';
+import { CityObject, FavoriteCity, requestCity, requestFavorites, removeFavorite } from '../functions/main';
 
 interface HomeScreenProp {
   navigation: any;
@@ -70,6 +68,18 @@ export default function RootScreen({ navigation }: HomeScreenProp) {
 
   }, [])
 
+  async function removeFavorites(favorite: FavoriteCity) {
+
+    let response = await removeFavorite(favorite);
+
+    if(!response) {
+      console.log("error..")
+    }
+
+    // reload and resync is needed for the favorites. 
+
+  }
+
 
   var colorCheck = false;
 
@@ -117,7 +127,12 @@ export default function RootScreen({ navigation }: HomeScreenProp) {
 
               return(
                 <TouchableOpacity key={favorite.id} style={styles.favoriteContainer} onPress={() => {navigation.navigate("WeatherResultScreen", favorite)}}>
-                  <Text>{favorite.name}</Text>
+                  <View style={styles.favoriteNameContainer}>
+                    <Text style={{fontSize:22}}>{favorite.name}</Text>
+                    <TouchableOpacity onPress={() => removeFavorites(favorite)}>
+                      <FontAwesome name={"trash"} size={22}/>
+                    </TouchableOpacity>
+                  </View>
                   <Text>{favorite.cityName}, {favorite.region}</Text>
                   <Text>{favorite.long + " " + favorite.lat}</Text>
                 </TouchableOpacity>
@@ -191,5 +206,11 @@ const styles = StyleSheet.create({
     backgroundColor: "grey",
     marginTop: "3%",
     borderRadius: 10,
+  }, favoriteNameContainer: {
+    display: "flex",
+    flexDirection:"row",
+    justifyContent: "space-between",
+    alignItems:"center",
+    backgroundColor: "gray",
   }
 });
