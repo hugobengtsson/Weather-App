@@ -57,6 +57,24 @@ export async function addFavorite(city: NewFavoriteCity) {
 
 }
 
+export async function updateFavorite(favorite: FavoriteCity): Promise<Boolean> {
+
+    let body = JSON.stringify(favorite);
+
+    let response = await makeRequest(`http://${IP}/api/city/updatecity`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: body
+    })
+
+    let result = response.json();
+
+    return result;
+
+}
+
 export async function removeFavorite(favorite: FavoriteCity): Promise<Boolean> {
 
     let body = JSON.stringify(favorite);
@@ -82,7 +100,6 @@ interface RequestObject {
     },
     body: string
 }
-
 
 export interface CityObject {
     cityName: string,
