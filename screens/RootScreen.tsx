@@ -97,8 +97,8 @@ export default function RootScreen({ navigation }: HomeScreenProp) {
           getResult.map((city) => {
               colorCheck = !colorCheck
               return( 
-                <TouchableOpacity onPress={() => {navigation.navigate("WeatherResultScreen", city)}} key={city.name} style={colorCheck ? {...styles.resultContainer, backgroundColor:"lightgray"} : styles.resultContainer}>
-                  <Text style={styles.cityName}>{city.name}, </Text>
+                <TouchableOpacity onPress={() => {navigation.navigate("WeatherResultScreen", city)}} key={city.cityName} style={colorCheck ? {...styles.resultContainer, backgroundColor:"lightgray"} : styles.resultContainer}>
+                  <Text style={styles.cityName}>{city.cityName}, </Text>
                   <Text style={styles.regionName}>{city.region}</Text>
                 </TouchableOpacity>
             )

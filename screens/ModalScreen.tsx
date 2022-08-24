@@ -1,15 +1,49 @@
 import React, { useState } from 'react';
 import { ActivityIndicator, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Text, View } from '../components/Themed';
+import { addFavorite, NewFavoriteCity } from '../functions/main';
 
 interface ModalProps {
+  navigation: any,
   route: any,
 }
 
 
 
-export default function ModalScreen({ route }: ModalProps) {
+export default function ModalScreen({ navigation, route }: ModalProps) {
   const [loading, setLoading] = useState<boolean>(false);
+  const [inputValue, setInputValue] = useState<string | undefined>(undefined)
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
+
+  const saveFavorite = async () => {
+
+    setLoading(true);
+
+    if(inputValue){
+      let newFavoriteCity: NewFavoriteCity = {
+        name: inputValue,
+        cityName: route.params.cityName,
+        region: route.params.region,
+        long: route.params.long,
+        lat: route.params.lat
+      }
+
+      let response = await addFavorite(newFavoriteCity)
+
+      if(response) {
+        setLoading(false)
+        navigation.navigate("WeatherResultScreen", response)
+      }
+      else {
+        setErrorMessage("Det gick inte att spara...")
+        setLoading(false)
+      }
+
+    }
+
+  }
+
+
 
 
   return (
@@ -21,12 +55,11 @@ export default function ModalScreen({ route }: ModalProps) {
           <TextInput 
           style={styles.input} 
           placeholder="Namn på objekt"
+          onChangeText={setInputValue}
           />
         </View>
-        <TouchableOpacity onPress={() => setLoading(true)} style={styles.buttonContainer}>
-          <View style={styles.button}>
-            <Text>Spara!</Text>
-          </View>
+        <TouchableOpacity onPress={() => saveFavorite()} style={styles.button}>
+            <Text>{route.params.id ? "Uppdatera!" : "Spara!"}</Text>
         </TouchableOpacity>
       </View>
       <View style={{...styles.loader, display: loading ? "flex": "none",}}>
@@ -66,9 +99,8 @@ const styles = StyleSheet.create({
   }, input: {
     fontSize: 20,
     width: "100%",
-  }, buttonContainer: {
-    marginTop: "3%",
   }, button: {
+    marginTop: "3%",
     backgroundColor: "lightgray",
     padding: "3%",
     borderRadius: 10,
