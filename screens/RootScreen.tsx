@@ -59,12 +59,11 @@ export default function RootScreen({ navigation }: HomeScreenProp) {
 
   }
 
-  var fetchFavorites = async () => {
+  const fetchFavorites = async () => {
     let response = await requestFavorites();
 
-    if(response) {
       setFavorites(response)
-    }
+
   };
 
 
@@ -84,8 +83,10 @@ export default function RootScreen({ navigation }: HomeScreenProp) {
 
     if(!response) {
       console.log("error..")
+      return;
     }
 
+    fetchFavorites()
     // reload and resync is needed for the favorites. 
 
   }
@@ -149,7 +150,7 @@ export default function RootScreen({ navigation }: HomeScreenProp) {
               )
             })
           ): (
-            <Text>Du har inte sparat några favoriter...</Text>
+            <Text style={{color:"white"}}>Du har inte sparat några favoriter...</Text>
           )}
           
           
