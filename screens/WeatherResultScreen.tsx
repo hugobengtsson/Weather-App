@@ -18,7 +18,6 @@ export default function WeatherResultScreen({ navigation, route }: WeatherResult
     const isFocused = useIsFocused();
 
     useEffect(() => {
-        console.log(route.params)
         const sendReq = async () => {
             let response = await requestWeather(route.params.long, route.params.lat)
             setResult(response)
@@ -33,12 +32,12 @@ export default function WeatherResultScreen({ navigation, route }: WeatherResult
         <View style={styles.container}>
             <View style={styles.banner}>
                 <View style={styles.bannerTitleContainer}>
-                    <Text style={{...styles.cityname, marginRight: "2%"}}>{route.params.name ? route.params.name: route.params.cityName}</Text>
+                    <Text style={{...styles.cityname, marginRight: "2%", color: "#696969"}}>{route.params.name ? route.params.name: route.params.cityName}</Text>
                     <TouchableOpacity onPress={() => navigation.navigate("modal", route.params)}>
-                        <FontAwesome name={route.params.name ? "pencil" : "save" } size={25} />
+                        <FontAwesome name={route.params.name ? "pencil" : "save" } size={25} color="gray" />
                     </TouchableOpacity>
                 </View>
-                {route.params.name ? <Text>{route.params.cityName + ", " + route.params.region}</Text> : undefined}
+                {route.params.name ? <Text style={{color: "gray"}}>{route.params.cityName + ", " + route.params.region}</Text> : undefined}
             </View>
 
             <ScrollView style={styles.weatherList}>
@@ -85,8 +84,8 @@ const styles = StyleSheet.create({
     }, banner: {
         width: "100%",
         height: "20%",
-        backgroundColor: "white",
-        borderBottomColor: "lightgrey",
+        backgroundColor: "lightgray",
+        borderBottomColor: "gray",
         borderBottomWidth: 1,
         display:"flex",
         alignItems:"center",
@@ -95,6 +94,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems:"center",
         justifyContent:"center",
+        backgroundColor: "lightgray",
     }, cityname: {
         fontSize: 32,
     }, weatherList: {
