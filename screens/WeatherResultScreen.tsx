@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, View } from '../components/Themed';
 import { requestWeather, WeatherObject } from '../functions/main';
-import navigation from '../navigation';
 
 interface WeatherResultProp {
     navigation: any,
@@ -31,9 +30,9 @@ export default function WeatherResultScreen({ navigation, route }: WeatherResult
         <View style={styles.container}>
             <View style={styles.banner}>
                 <View style={styles.bannerTitleContainer}>
-                    <Text style={{...styles.cityname, marginRight: "2%"}}>{route.params.name}</Text>
+                    <Text style={{...styles.cityname, marginRight: "2%"}}>{route.params.id ? route.params.name: route.params.cityName}</Text>
                     <TouchableOpacity onPress={() => navigation.navigate("modal", route.params)}>
-                        <FontAwesome name="save" size={25} />
+                        <FontAwesome name={route.params.id ? "pencil" : "save" } size={25} />
                     </TouchableOpacity>
                 </View>
                 {route.params.id ? <Text>{route.params.cityName + ", " + route.params.region}</Text> : undefined}
