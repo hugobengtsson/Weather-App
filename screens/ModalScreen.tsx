@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ActivityIndicator, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Text, View } from '../components/Themed';
-import { addFavorite, NewFavoriteCity } from '../functions/main';
+import { addFavorite, FavoriteCity, NewFavoriteCity, updateFavorite } from '../functions/main';
 
 interface ModalProps {
   navigation: any,
@@ -43,7 +43,26 @@ export default function ModalScreen({ navigation, route }: ModalProps) {
 
   }
 
+  const updateFavorites = async (favorite: FavoriteCity) => {
+    setLoading(true);
 
+    if(inputValue){
+      
+      favorite.name = inputValue;
+
+      let response = await updateFavorite(favorite)
+
+      if(response) {
+        setLoading(false)
+        navigation.navigate("WeatherResultScreen", response)
+      }
+      else {
+        setErrorMessage("Det gick inte att spara...")
+        setLoading(false)
+      }
+      }
+
+  }
 
 
   return (
@@ -58,7 +77,9 @@ export default function ModalScreen({ navigation, route }: ModalProps) {
           onChangeText={setInputValue}
           />
         </View>
-        <TouchableOpacity onPress={() => saveFavorite()} style={styles.button}>
+        <TouchableOpacity onPress={() =>{
+          route.params.id ? updateFavorites(route.params) : saveFavorite() 
+        }} style={styles.button}>
             <Text>{route.params.id ? "Uppdatera!" : "Spara!"}</Text>
         </TouchableOpacity>
       </View>
