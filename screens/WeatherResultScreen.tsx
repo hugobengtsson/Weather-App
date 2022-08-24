@@ -1,4 +1,5 @@
 import { FontAwesome } from '@expo/vector-icons';
+import { useIsFocused } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, View } from '../components/Themed';
@@ -15,13 +16,16 @@ export default function WeatherResultScreen({ navigation, route }: WeatherResult
     const [getResult, setResult] = useState<WeatherObject[] | undefined>(undefined);
     const [loading, setLoading] = useState<boolean>(false);
 
+    const isFocused = useIsFocused();
+
     useEffect(() => {
+        console.log(route.params)
         const sendReq = async () => {
             let response = await requestWeather(route.params.long, route.params.lat)
             setResult(response)
         }
         sendReq();
-    },[]);
+    },[isFocused]);
 
     let today: Date | number = new Date();
     today = today.getDate();
@@ -30,12 +34,12 @@ export default function WeatherResultScreen({ navigation, route }: WeatherResult
         <View style={styles.container}>
             <View style={styles.banner}>
                 <View style={styles.bannerTitleContainer}>
-                    <Text style={{...styles.cityname, marginRight: "2%"}}>{route.params.id ? route.params.name: route.params.cityName}</Text>
+                    <Text style={{...styles.cityname, marginRight: "2%"}}>{route.params.name ? route.params.name: route.params.cityName}</Text>
                     <TouchableOpacity onPress={() => navigation.navigate("modal", route.params)}>
-                        <FontAwesome name={route.params.id ? "pencil" : "save" } size={25} />
+                        <FontAwesome name={route.params.name ? "pencil" : "save" } size={25} />
                     </TouchableOpacity>
                 </View>
-                {route.params.id ? <Text>{route.params.cityName + ", " + route.params.region}</Text> : undefined}
+                {route.params.name ? <Text>{route.params.cityName + ", " + route.params.region}</Text> : undefined}
             </View>
 
             <ScrollView style={styles.weatherList}>
