@@ -1,4 +1,5 @@
 import { FontAwesome } from '@expo/vector-icons';
+import { useIsFocused } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Text, View } from '../components/Themed';
@@ -12,8 +13,11 @@ interface HomeScreenProp {
 export default function RootScreen({ navigation }: HomeScreenProp) {
   const [getInputValue, setInputValue] = useState<undefined | string>();
   const [getResult, setResult] = useState<undefined | CityObject[]>(undefined);
-  const [getFavorites, setFavorites] = useState <false | FavoriteCity[]>(false);
+  const [getFavorites, setFavorites] = useState <FavoriteCity[] | false>(false);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const isFocused = useIsFocused();
+
 
   useEffect(() => {
 
@@ -32,9 +36,11 @@ export default function RootScreen({ navigation }: HomeScreenProp) {
 
   function setInputTimer(value: string) {
     setLoading(true)
-    if(value.length == 0 || value === "" || value === " "){
-      setResult(undefined)
+    if(value.length === 0 || value === "" || value === " "){
       setLoading(false)
+      clearTimeout(timer)
+      setResult(undefined)
+      return;
     }
 
     if(value.length == 1) {
@@ -54,19 +60,24 @@ export default function RootScreen({ navigation }: HomeScreenProp) {
 
   }
 
+  var fetchFavorites = async () => {
+    let response = await requestFavorites();
+
+    if(response) {
+      setFavorites(response)
+    }
+  };
+
 
   useEffect(() => {
 
-    if(!getFavorites) {
-      const sendReq = async () => {
-        let response = await requestFavorites();
-        setFavorites(response)
-      };
-      sendReq();
-    }
+    setResult(undefined)
+    setInputValue(undefined)
+
+    fetchFavorites();
 
 
-  }, [])
+  }, [isFocused])
 
   async function removeFavorites(favorite: FavoriteCity) {
 
@@ -107,7 +118,7 @@ export default function RootScreen({ navigation }: HomeScreenProp) {
           getResult.map((city) => {
               colorCheck = !colorCheck
               return( 
-                <TouchableOpacity onPress={() => {navigation.navigate("WeatherResultScreen", city)}} key={city.cityName} style={colorCheck ? {...styles.resultContainer, backgroundColor:"lightgray"} : styles.resultContainer}>
+                <TouchableOpacity onPress={() => {navigation.navigate("WeatherResultScreen", city)}} key={city.cityName + city.region} style={colorCheck ? {...styles.resultContainer, backgroundColor:"lightgray"} : styles.resultContainer}>
                   <Text style={styles.cityName}>{city.cityName}, </Text>
                   <Text style={styles.regionName}>{city.region}</Text>
                 </TouchableOpacity>
