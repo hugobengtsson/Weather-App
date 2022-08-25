@@ -31,7 +31,7 @@ export default function ModalScreen({ navigation, route }: ModalProps) {
 
       if(response) {
         setLoading(false)
-        navigation.navigate("WeatherResultScreen", newFavoriteCity)
+        navigation.navigate("WeatherResultScreen", response)
       }
       else {
         setErrorMessage("Det gick inte att spara...")
