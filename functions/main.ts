@@ -1,3 +1,4 @@
+import { ImageSourcePropType } from "react-native";
 import { IP } from "../ip";
 
 export async function makeRequest(url: string, requestObject: RequestObject | undefined) {
@@ -113,7 +114,8 @@ export interface WeatherObject {
     hour: number,
     date: number,
     temp: number,
-    symbol: number,
+    image: ImageSourcePropType,
+    symbol: number | string,
 }
 
 export interface NewFavoriteCity {

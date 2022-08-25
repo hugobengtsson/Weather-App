@@ -1,7 +1,7 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { useIsFocused } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity, View, Text } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity, View, Text, Image } from 'react-native';
 import { requestWeather, WeatherObject } from '../functions/main';
 
 interface WeatherResultProp {
@@ -20,14 +20,38 @@ export default function WeatherResultScreen({ navigation, route }: WeatherResult
     useEffect(() => {
         const sendReq = async () => {
             let response = await requestWeather(route.params.long, route.params.lat)
-            setResult(response)
+            
+            let listWithSymbol = setWeatherSymbol(response)
+            setResult(listWithSymbol)
         }
         sendReq();
     },[isFocused]);
 
+    function setWeatherSymbol(weatherResult: WeatherObject[]) {
+
+        weatherResult.forEach((timeStamp) => {
+
+            if(timeStamp.symbol === 1 || timeStamp.symbol === 2){
+                timeStamp.image = require("./../assets/weatherImg/sun.png")
+            } else if(timeStamp.symbol === 3 || timeStamp.symbol === 4 || timeStamp.symbol === 5 || timeStamp.symbol === 6 || timeStamp.symbol === 7) {
+                timeStamp.image = require("./../assets/weatherImg/cloudy.png")
+            } else if(timeStamp.symbol === 8 || timeStamp.symbol === 9 || timeStamp.symbol === 10 || timeStamp.symbol === 11 || timeStamp.symbol === 12 || timeStamp.symbol === 13 || timeStamp.symbol === 14 || timeStamp.symbol === 18 || timeStamp.symbol === 19 || timeStamp.symbol === 20 || timeStamp.symbol === 22 || timeStamp.symbol === 23 || timeStamp.symbol === 24) {
+                timeStamp.image = require("./../assets/weatherImg/rain.png")
+            } else if(timeStamp.symbol === 15 || timeStamp.symbol === 16 || timeStamp.symbol === 17 || timeStamp.symbol === 25 || timeStamp.symbol === 26 || timeStamp.symbol === 27){
+                timeStamp.image = require("./../assets/weatherImg/snowing.png")
+            } else if (timeStamp.symbol === 21) {
+                timeStamp.image = require("./../assets/weatherImg/storm.png")
+            }
+        })
+
+        return weatherResult;
+
+
+    }
+    const image = require("./../assets/weatherImg/cloudy.png")
+
     let today: Date | number = new Date();
     today = today.getDate();
-
     return (
         <View style={styles.container}>
             <View style={styles.banner}>
@@ -46,7 +70,7 @@ export default function WeatherResultScreen({ navigation, route }: WeatherResult
                     getResult ? (
 
                         getResult.map((timeStamp) => {
-                            
+                            timeStamp.symbol.toString()
                             return (
                                 <View key={timeStamp.id} style={styles.weatherListItem}>
                                     <View style={styles.dateContainer}>
@@ -57,7 +81,7 @@ export default function WeatherResultScreen({ navigation, route }: WeatherResult
                                     </View>
                                     <View style={styles.tempContainer}>
                                         <Text style={{fontSize: 25, marginRight: "1%"}}>{timeStamp.temp}</Text>
-                                        <FontAwesome name="sun-o" size={25}/>
+                                        <Image style={{width: 30, height: 30}} source={timeStamp.image}/>
                                     </View>
                                 </View>
                         )
