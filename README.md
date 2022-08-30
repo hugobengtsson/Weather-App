@@ -8,8 +8,8 @@ You will need to install two different repositories to be able to run the projec
 
 How to run the app: 
 
-# npm i
-# Add ip.ts with an exported variable named "IP" with the ip-adress of the server.
-# npm start
+- npm i
+- Add ip.ts with an exported variable named "IP" with the ip-adress of the server.
+- npm start
 
 To run the app you will need a simulator, I have used a simulator from Xcode. Alternativly run the app on your phone download "Expo Go" from AppStore. When you have the app you can simply scan the QR-code shown in the terminal window. 
